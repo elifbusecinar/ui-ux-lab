@@ -1,0 +1,41 @@
+:root {
+    /* Color Tokens */
+    --color-cream: #FFF8F0;
+    --color-rose: #E8A598;
+    --color-sage: #C8D5B9;
+    --color-charcoal: #1A1A1A;
+    --color-slate: #6B7280;
+    --color-butter: #FAE8B2;
+    --color-white: #FFFFFF;
+    --color-shadow: rgba(0, 0, 0, 0.08);
+    --color-border: rgba(26, 26, 26, 0.06);
+
+    /* Typography Tokens */
+    --font-heading: 'DM Serif Display', serif;
+    --font-body: 'Outfit', sans-serif;
+    --font-code: 'Consolas', 'Monaco', 'Courier New', monospace;
+
+    /* Spacing Tokens */
+    --space-xs: 0.5rem;
+    --space-sm: 1rem;
+    --space-md: 1.5rem;
+    --space-lg: 2rem;
+    --space-xl: 3rem;
+    --space-xxl: 4rem;
+
+    /* Radius Tokens */
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-full: 9999px;
+
+    /* Shadow Tokens */
+    --shadow-sm: 0 2px 12px var(--color-shadow);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.3);
+
+    /* Transition Tokens */
+    --transition-fast: 0.2s ease;
+    --transition-normal: 0.3s ease;
+    --transition-slow: 0.5s ease;
+}
