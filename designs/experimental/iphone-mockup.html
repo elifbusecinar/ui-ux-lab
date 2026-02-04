@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iPhone Mockup</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .container {
+            text-align: center;
+        }
+
+        h1 {
+            color: white;
+            margin-bottom: 3rem;
+            font-size: 2.5rem;
+        }
+
+        .phone-mockup {
+            width: 300px;
+            height: 600px;
+            background: #1a1a1a;
+            border-radius: 40px;
+            padding: 12px;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+            position: relative;
+            margin: 0 auto;
+        }
+
+        .phone-screen {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 30px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .notch {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 30px;
+            background: #1a1a1a;
+            border-radius: 0 0 20px 20px;
+        }
+
+        .screen-content {
+            padding: 60px 30px 30px;
+            color: white;
+            text-align: center;
+        }
+
+        .app-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            margin: 10px;
+            display: inline-block;
+            backdrop-filter: blur(10px);
+        }
+
+        .time {
+            font-size: 3rem;
+            font-weight: 300;
+            margin-top: 40px;
+        }
+
+        .date {
+            font-size: 1.2rem;
+            opacity: 0.8;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>iPhone Mockup</h1>
+        <div class="phone-mockup">
+            <div class="phone-screen">
+                <div class="notch"></div>
+                <div class="screen-content">
+                    <div class="time">12:30</div>
+                    <div class="date">Monday, February 4</div>
+                    <div style="margin-top: 60px;">
+                        <div class="app-icon"></div>
+                        <div class="app-icon"></div>
+                        <div class="app-icon"></div>
+                        <div class="app-icon"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Character Illustration</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .container {
+            background: white;
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 2rem;
+            color: #333;
+            font-size: 2rem;
+        }
+
+        .character {
+            width: 300px;
+            height: 300px;
+            margin: 0 auto 2rem;
+            position: relative;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        .character-svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .description {
+            color: #666;
+            line-height: 1.6;
+            font-size: 1.1rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Character Illustration</h1>
+        <div class="character">
+            <svg class="character-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                <!-- Head -->
+                <circle cx="100" cy="80" r="40" fill="#FFD6A5" />
+
+                <!-- Hair -->
+                <path d="M 60 70 Q 60 40 100 40 Q 140 40 140 70" fill="#8B4513" />
+
+                <!-- Eyes -->
+                <circle cx="85" cy="75" r="5" fill="#333" />
+                <circle cx="115" cy="75" r="5" fill="#333" />
+
+                <!-- Smile -->
+                <path d="M 80 90 Q 100 100 120 90" stroke="#333" stroke-width="2" fill="none" />
+
+                <!-- Body -->
+                <rect x="70" y="120" width="60" height="60" rx="10" fill="#667eea" />
+
+                <!-- Arms -->
+                <rect x="50" y="130" width="15" height="40" rx="7" fill="#FFD6A5" />
+                <rect x="135" y="130" width="15" height="40" rx="7" fill="#FFD6A5" />
+
+                <!-- Legs -->
+                <rect x="80" y="180" width="15" height="40" rx="7" fill="#4A5568" />
+                <rect x="105" y="180" width="15" height="40" rx="7" fill="#4A5568" />
+            </svg>
+        </div>
+        <p class="description">
+            A friendly character illustration perfect for web and mobile applications.
+            Fully customizable colors and scalable vector graphics.
+        </p>
+    </div>
+</body>
+
+</html>
