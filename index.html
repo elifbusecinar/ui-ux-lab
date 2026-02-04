@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UI/UX Lab — Design Collection</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Outfit:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <!-- Highlight.js Theme -->
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+    <!-- Header -->
+    <header>
+        <a href="#" onclick="showHome(); return false;" class="logo">UI/UX Lab</a>
+        <nav>
+            <a href="#" onclick="showHome(); return false;" class="nav-link active">Collection</a>
+            <a href="#" class="nav-link">About</a>
+            <a href="#" onclick="openUploadModal(); return false;" class="upload-btn">+ Add New</a>
+        </nav>
+    </header>
+
+    <!-- Homepage View (Discovery) -->
+    <div id="home-view">
+        <section class="hero">
+            <h1>Design Collection</h1>
+            <p>A carefully curated showcase for my UI/UX projects, components, and design assets.</p>
+        </section>
+
+        <!-- Category Grid -->
+        <section class="category-section">
+            <div class="category-grid" id="category-grid">
+                <!-- Categories will be injected here via JS -->
+            </div>
+        </section>
+    </div>
+
+    <!-- Category Detail View (Deep Dive) -->
+    <div id="category-view" style="display: none;">
+        <div class="main-wrapper">
+            <!-- Sidebar -->
+            <aside class="sidebar active">
+                <div class="sidebar-title">Categories</div>
+                <div class="filter-group" id="sidebar-filters">
+                    <!-- Sidebar filters injected via JS -->
+                </div>
+            </aside>
+
+            <!-- Content Area -->
+            <main class="content-area">
+                <div class="gallery" id="gallery">
+                    <!-- Design items injected here -->
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Upload Modal -->
+    <div id="uploadModal" class="modal">
+        <div class="modal-content" style="max-width: 600px; height: auto; padding: 2rem;">
+            <div class="modal-header" style="border: none; padding: 0 0 1.5rem;">
+                <h2 class="modal-title">Add New Design</h2>
+                <button class="close-btn" onclick="closeUploadModal()">×</button>
+            </div>
+            <form id="uploadForm">
+                <div class="form-group">
+                    <label>Title</label>
+                    <input type="text" name="title" required>
+                </div>
+                <!-- Categories Select Updated for New Structure -->
+                <div class="form-group">
+                    <label>Category</label>
+                    <select name="category" required>
+                        <option value="foundations">Foundations</option>
+                        <option value="basic-ui">Basic UI Elements</option>
+                        <option value="forms">Form Components</option>
+                        <option value="navigation">Navigation Systems</option>
+                        <option value="layout">Layout & Containers</option>
+                        <option value="feedback">Feedback & States</option>
+                        <option value="interaction">Scroll & Interaction</option>
+                        <option value="auth">Authentication & Onboarding</option>
+                        <option value="data">Data Display</option>
+                        <option value="pages">Pages & Templates</option>
+                        <option value="a11y">Accessibility & UX</option>
+                        <option value="experimental">Experimental Lab</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Tags (comma separated)</label>
+                    <input type="text" name="tags" placeholder="e.g. mobile, dark-mode">
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea name="description" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label>HTML Code</label>
+                    <textarea name="htmlCode" required style="font-family: monospace;"></textarea>
+                </div>
+                <button type="submit" class="submit-btn">Add Design</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Code Preview Modal -->
+    <div id="codeModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="codeModalTitle">Design Preview</h2>
+                <button class="close-btn" onclick="closeCodeModal()">×</button>
+            </div>
+            <div class="split-view">
+                <div class="preview-pane">
+                    <iframe id="previewFrame"></iframe>
+                </div>
+                <div class="code-pane">
+                    <div class="code-header">
+                        <span style="color: #abb2bf; font-size: 0.9rem;">Source Code</span>
+                        <div class="code-actions">
+                            <button class="code-action-btn copy-btn" onclick="copyCode()">Copy</button>
+                        </div>
+                    </div>
+                    <div class="code-content">
+                        <pre><code class="language-html" id="codeDisplay"></code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2026 UI/UX Lab — Beauty created through design</p>
+    </footer>
+
+    <script>
+        // Embedded design data with expanded schema (Tags, New Categories)
+        let designsData = [
+            // Foundations
+            {
+                "id": "palette-modern-1",
+                "title": "Modern Primary Palette",
+                "category": "foundations",
+                "tags": ["colors", "modern", "palette"],
+                "description": "A vibrant primary color palette with shades for diverse UI states.",
+                "fileName": "foundations/modern-palette.html",
+                "code": `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Modern Primary Palette</title>
+    <style>
+        body { font-family: 'Outfit', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; background: #f8f9fa; }
+        .palette { display: flex; gap: 1rem; }
+        .swatch { width: 80px; height: 120px; border-radius: 12px; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 10px; color: white; font-weight: 500; font-size: 0.9rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+    </style>
+</head>
+<body>
+    <div class="palette">
+        <div class="swatch" style="background: #eef2ff; color: #333;">50</div>
+        <div class="swatch" style="background: #e0e7ff; color: #333;">100</div>
+        <div class="swatch" style="background: #6366f1;">500</div>
+        <div class="swatch" style="background: #4f46e5;">600</div>
+        <div class="swatch" style="background: #312e81;">900</div>
+    </div>
+</body>
+</html>`
+            },
+            {
+                "id": "btn-modern-1",
+                "title": "Modern Button Set",
+                "category": "basic-ui", // Re-categorized
+                "tags": ["buttons", "hover-effects", "ui-kit"],
+                "description": "Complete button set for different states and variants.",
+                "fileName": "basic-ui/modern-buttons.html",
+                "createdAt": "2026-02-04T01:50:00+03:00",
+                "code": `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Button Set</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem; }
+        .container { background: white; padding: 3rem; border-radius: 20px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); max-width: 800px; width: 100%; }
+        h1 { text-align: center; margin-bottom: 2rem; color: #333; font-size: 2rem; }
+        .button-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
+        .btn { padding: 1rem 2rem; border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease; text-align: center; }
+        .btn-primary { background: #667eea; color: white; }
+        .btn-primary:hover { background: #5568d3; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4); }
+        .btn-secondary { background: #6c757d; color: white; }
+        .btn-secondary:hover { background: #5a6268; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(108, 117, 125, 0.4); }
+        .btn-success { background: #28a745; color: white; }
+        .btn-success:hover { background: #218838; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(40, 167, 69, 0.4); }
+        .btn-danger { background: #dc3545; color: white; }
+        .btn-danger:hover { background: #c82333; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(220, 53, 69, 0.4); }
+        .btn-outline { background: transparent; border: 2px solid #667eea; color: #667eea; }
+        .btn-outline:hover { background: #667eea; color: white; transform: translateY(-2px); }
+        .btn-rounded { background: #ff6b6b; color: white; border-radius: 50px; }
+        .btn-rounded:hover { background: #ee5a52; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(255, 107, 107, 0.4); }
+        .btn:active { transform: translateY(0); }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Modern Button Set</h1>
+        <div class="button-grid">
+            <button class="btn btn-primary">Primary</button>
+            <button class="btn btn-secondary">Secondary</button>
+            <button class="btn btn-success">Success</button>
+            <button class="btn btn-danger">Danger</button>
+            <button class="btn btn-outline">Outline</button>
+            <button class="btn btn-rounded">Rounded</button>
+            <button class="btn btn-primary" disabled>Disabled</button>
+        </div>
+    </div>
+</body>
+</html>`
+            },
+            {
+                "id": "icon-minimal-1",
+                "title": "Minimal Icon Pack",
+                "category": "basic-ui", // Re-categorized
+                "tags": ["icons", "svg", "minimal"],
+                "description": "64 minimalist icons in SVG format.",
+                "fileName": "basic-ui/minimal-icons.html",
+                "createdAt": "2026-02-04T01:50:00+03:00",
+                "code": `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minimal Icon Pack</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem; }
+        .container { background: white; padding: 3rem; border-radius: 20px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); max-width: 900px; width: 100%; }
+        h1 { text-align: center; margin-bottom: 2rem; color: #333; font-size: 2rem; }
+        .icon-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 2rem; }
+        .icon-item { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; padding: 1rem; border-radius: 12px; transition: all 0.3s ease; cursor: pointer; }
+        .icon-item:hover { background: #f8f9fa; transform: translateY(-5px); }
+        .icon { width: 48px; height: 48px; stroke: #333; stroke-width: 2; fill: none; transition: all 0.3s ease; }
+        .icon-item:hover .icon { stroke: #f5576c; transform: scale(1.1); }
+        .icon-name { font-size: 0.85rem; color: #666; text-align: center; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Minimal Icon Pack</h1>
+        <div class="icon-grid">
+            <div class="icon-item"><svg class="icon" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg><span class="icon-name">Home</span></div>
+            <div class="icon-item"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg><span class="icon-name">Clock</span></div>
+            <div class="icon-item"><svg class="icon" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg><span class="icon-name">Heart</span></div>
+            <div class="icon-item"><svg class="icon" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg><span class="icon-name">Star</span></div>
+            <div class="icon-item"><svg class="icon" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg><span class="icon-name">Message</span></div>
+            <div class="icon-item"><svg class="icon" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg><span class="icon-name">Bell</span></div>
+            <div class="icon-item"><svg class="icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></svg><span class="icon-name">Search</span></div>
+            <div class="icon-item"><svg class="icon" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg><span class="icon-name">User</span></div>
+        </div>
+    </div>
+</body>
+</html>`
+            },
+            {
+                "id": "illustration-char-1",
+                "title": "Character Illustration",
+                "category": "illustrations",
+                "tags": ["svg", "animation", "character"],
+                "description": "Colorful character illustrations for web and mobile applications.",
+                "fileName": "illustrations/character-float.html",
+                "createdAt": "2026-02-04T01:50:00+03:00",
+                "code": `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Character Illustration</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem; }
+        .container { background: white; padding: 3rem; border-radius: 20px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); max-width: 600px; width: 100%; text-align: center; }
+        h1 { margin-bottom: 2rem; color: #333; font-size: 2rem; }
+        .character { width: 300px; height: 300px; margin: 0 auto 2rem; position: relative; animation: float 3s ease-in-out infinite; }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
+        .character-svg { width: 100%; height: 100%; }
+        .description { color: #666; line-height: 1.6; font-size: 1.1rem; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Character Illustration</h1>
+        <div class="character">
+            <svg class="character-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="100" cy="80" r="40" fill="#FFD6A5" />
+                <path d="M 60 70 Q 60 40 100 40 Q 140 40 140 70" fill="#8B4513" />
+                <circle cx="85" cy="75" r="5" fill="#333" />
+                <circle cx="115" cy="75" r="5" fill="#333" />
+                <path d="M 80 90 Q 100 100 120 90" stroke="#333" stroke-width="2" fill="none" />
+                <rect x="70" y="120" width="60" height="60" rx="10" fill="#667eea" />
+                <rect x="50" y="130" width="15" height="40" rx="7" fill="#FFD6A5" />
+                <rect x="135" y="130" width="15" height="40" rx="7" fill="#FFD6A5" />
+                <rect x="80" y="180" width="15" height="40" rx="7" fill="#4A5568" />
+                <rect x="105" y="180" width="15" height="40" rx="7" fill="#4A5568" />
+            </svg>
+        </div>
+        <p class="description">A friendly character illustration perfect for web and mobile applications.</p>
+    </div>
+</body>
+</html>`
+            },
+            {
+                "id": "form-elements-1",
+                "title": "Form Elements",
+                "category": "forms", // Re-categorized
+                "tags": ["input", "checkbox", "forms"],
+                "description": "Collection of input, checkbox, radio button and other form elements.",
+                "fileName": "forms/form-elements.html",
+                "createdAt": "2026-02-04T01:50:00+03:00",
+                "code": `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Elements</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem; }
+        .container { background: white; padding: 3rem; border-radius: 20px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); max-width: 600px; width: 100%; }
+        h1 { text-align: center; margin-bottom: 2rem; color: #333; font-size: 2rem; }
+        .form-group { margin-bottom: 1.5rem; }
+        label { display: block; margin-bottom: 0.5rem; color: #333; font-weight: 500; }
+        input[type="text"], input[type="email"], input[type="password"], select, textarea { width: 100%; padding: 0.8rem; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1rem; transition: all 0.3s ease; font-family: inherit; }
+        input[type="text"]:focus, input[type="email"]:focus, input[type="password"]:focus, select:focus, textarea:focus { outline: none; border-color: #667eea; box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1); }
+        textarea { resize: vertical; min-height: 100px; }
+        .checkbox-group, .radio-group { display: flex; flex-direction: column; gap: 0.8rem; }
+        .checkbox-item, .radio-item { display: flex; align-items: center; gap: 0.5rem; }
+        input[type="checkbox"], input[type="radio"] { width: 20px; height: 20px; cursor: pointer; }
+        .switch { position: relative; display: inline-block; width: 50px; height: 24px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: 0.4s; border-radius: 24px; }
+        .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition: 0.4s; border-radius: 50%; }
+        input:checked + .slider { background-color: #667eea; }
+        input:checked + .slider:before { transform: translateX(26px); }
+        .submit-btn { width: 100%; padding: 1rem; background: #667eea; color: white; border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease; }
+        .submit-btn:hover { background: #5568d3; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Form Elements</h1>
+        <form>
+            <div class="form-group"><label>Text Input</label><input type="text" placeholder="Enter your name"></div>
+            <div class="form-group"><label>Email Input</label><input type="email" placeholder="your@email.com"></div>
+            <button type="submit" class="submit-btn">Submit Form</button>
+        </form>
+    </div>
+</body>
+</html>`
+            },
+            {
+                "id": "mockup-iphone-1",
+                "title": "iPhone Mockup",
+                "category": "experimental", // Adjusted to experimental/lab as it's a creative mockup
+                "tags": ["mockup", "mobile", "css-art"],
+                "description": "High-resolution iPhone mockup with smart object support.",
+                "fileName": "experimental/iphone-mockup.html",
+                "createdAt": "2026-02-04T01:50:00+03:00",
+                "code": `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iPhone Mockup</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem; }
+        .container { text-align: center; }
+        h1 { color: white; margin-bottom: 3rem; font-size: 2.5rem; }
+        .phone-mockup { width: 300px; height: 600px; background: #1a1a1a; border-radius: 40px; padding: 12px; box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5); position: relative; margin: 0 auto; }
+        .phone-screen { width: 100%; height: 100%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 30px; overflow: hidden; position: relative; }
+        .notch { position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 150px; height: 30px; background: #1a1a1a; border-radius: 0 0 20px 20px; }
+        .screen-content { padding: 60px 30px 30px; color: white; text-align: center; }
+        .app-icon { width: 60px; height: 60px; background: rgba(255, 255, 255, 0.2); border-radius: 15px; margin: 10px; display: inline-block; backdrop-filter: blur(10px); }
+        .time { font-size: 3rem; font-weight: 300; margin-top: 40px; }
+        .date { font-size: 1.2rem; opacity: 0.8; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>iPhone Mockup</h1>
+        <div class="phone-mockup">
+            <div class="phone-screen">
+                <div class="notch"></div>
+                <div class="screen-content">
+                    <div class="time">12:30</div>
+                    <div class="date">Monday, February 4</div>
+                    <div style="margin-top: 60px;">
+                        <div class="app-icon"></div>
+                        <div class="app-icon"></div>
+                        <div class="app-icon"></div>
+                        <div class="app-icon"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>`
+            },
+            {
+                "id": "template-dashboard-1",
+                "title": "Dashboard Template",
+                "category": "pages", // Re-categorized
+                "tags": ["dashboard", "admin", "template"],
+                "description": "Modern and responsive dashboard template, Figma file included.",
+                "fileName": "pages/dashboard-template.html",
+                "createdAt": "2026-02-04T01:50:00+03:00",
+                "code": `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Template</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f7fa; }
+        .dashboard { display: grid; grid-template-columns: 250px 1fr; min-height: 100vh; }
+        .sidebar { background: #2c3e50; color: white; padding: 2rem 1rem; }
+        .logo { font-size: 1.5rem; font-weight: bold; margin-bottom: 2rem; padding: 0 1rem; }
+        .nav-item { padding: 1rem; margin: 0.5rem 0; border-radius: 8px; cursor: pointer; transition: all 0.3s ease; }
+        .nav-item:hover { background: rgba(255, 255, 255, 0.1); }
+        .nav-item.active { background: #3498db; }
+        .main-content { padding: 2rem; }
+        .header { background: white; padding: 1.5rem; border-radius: 12px; margin-bottom: 2rem; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); }
+        .header h1 { font-size: 2rem; color: #2c3e50; }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
+        .stat-card { background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); transition: transform 0.3s ease; }
+        .stat-card:hover { transform: translateY(-5px); }
+        .stat-value { font-size: 2rem; font-weight: bold; color: #2c3e50; margin: 0.5rem 0; }
+        .stat-label { color: #7f8c8d; font-size: 0.9rem; }
+        .chart-card { background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); }
+        .chart-placeholder { height: 300px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.2rem; }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <aside class="sidebar">
+            <div class="logo">📊 Dashboard</div>
+            <div class="nav-item active">🏠 Home</div>
+            <div class="nav-item">📈 Analytics</div>
+            <div class="nav-item">👥 Users</div>
+            <div class="nav-item">⚙️ Settings</div>
+        </aside>
+        <main class="main-content">
+            <div class="header">
+                <h1>Welcome back!</h1>
+                <p style="color: #7f8c8d; margin-top: 0.5rem;">Here's what's happening with your projects today.</p>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">Total Users</div>
+                    <div class="stat-value">12,543</div>
+                    <div style="color: #27ae60; font-size: 0.9rem;">↑ 12% from last month</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Revenue</div>
+                    <div class="stat-value">$45,231</div>
+                    <div style="color: #27ae60; font-size: 0.9rem;">↑ 8% from last month</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Active Projects</div>
+                    <div class="stat-value">24</div>
+                    <div style="color: #e74c3c; font-size: 0.9rem;">↓ 3% from last month</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Conversion Rate</div>
+                    <div class="stat-value">3.2%</div>
+                    <div style="color: #27ae60; font-size: 0.9rem;">↑ 0.5% from last month</div>
+                </div>
+            </div>
+            <div class="chart-card">
+                <h2 style="margin-bottom: 1.5rem; color: #2c3e50;">Revenue Overview</h2>
+                <div class="chart-placeholder">Chart Visualization Area</div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>`
+            }
+        ];
+
+        // Comprehensive 12 Categories
+        const categoryData = {
+            'foundations': { name: 'Foundations', icon: '🎨', desc: 'Colors, Typography, Spacing, Tokens.' },
+            'basic-ui': { name: 'Basic UI Elements', icon: '🧩', desc: 'Icons, Buttons, Toggles, Avatars.' },
+            'forms': { name: 'Form Components', icon: '📝', desc: 'Inputs, Selects, File Uploads.' },
+            'navigation': { name: 'Navigation Systems', icon: '🧭', desc: 'Navbar, Sidebar, Breadcrumbs.' },
+            'layout': { name: 'Layout & Containers', icon: '📐', desc: 'Grids, Cards, Modals.' },
+            'feedback': { name: 'Feedback & States', icon: '🔔', desc: 'Toasts, Alerts, Skeletons.' },
+            'interaction': { name: 'Scroll & Interaction', icon: '👆', desc: 'Custom Scroll, Parallax.' },
+            'auth': { name: 'Authentication', icon: '🔐', desc: 'Login, Register, OTP.' },
+            'data': { name: 'Data Display', icon: '📊', desc: 'Tables, Charts, Kanban.' },
+            'pages': { name: 'Pages & Templates', icon: '📑', desc: 'Landing, Dashboard, Profile.' },
+            'a11y': { name: 'Accessibility', icon: '♿', desc: 'High Contrast, Keyboard Nav.' },
+            'experimental': { name: 'Experimental Lab', icon: '🧪', desc: 'Glassmorphism, AI, Creative.' }
+        };
+
+        let currentDesignCode = '';
+        let currentDesignFileName = '';
+        let currentCategory = 'all';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderHomepage();
+            setupSidebarFilters();
+        });
+
+        function showHome() {
+            document.getElementById('home-view').style.display = 'block';
+            document.getElementById('category-view').style.display = 'none';
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+            document.querySelector('nav a[class="nav-link active"]')?.classList.remove('active');
+            document.querySelector('nav a[href="#"]:first-child').classList.add('active'); // Approximate
+            window.scrollTo(0, 0);
+        }
+
+        function showCategory(categoryId) {
+            currentCategory = categoryId;
+            document.getElementById('home-view').style.display = 'none';
+            document.getElementById('category-view').style.display = 'block';
+
+            document.querySelectorAll('.filter-item').forEach(item => {
+                item.classList.remove('active');
+                if (item.dataset.filter === categoryId) item.classList.add('active');
+            });
+
+            renderCategoryGallery(categoryId);
+            window.scrollTo(0, 0);
+        }
+
+        function renderHomepage() {
+            const grid = document.getElementById('category-grid');
+            grid.innerHTML = '';
+
+            Object.keys(categoryData).forEach(key => {
+                const cat = categoryData[key];
+                const count = designsData.filter(d => d.category === key).length;
+
+                const card = document.createElement('a');
+                card.className = 'category-card';
+                card.href = '#';
+                card.onclick = (e) => { e.preventDefault(); showCategory(key); };
+
+                card.innerHTML = `
+                    <div class="category-icon">${cat.icon}</div>
+                    <h3 class="category-title">${cat.name}</h3>
+                    <p class="category-desc">${cat.desc}</p>
+                    <div class="category-link">
+                        ${count} Items
+                        <span style="font-size: 1.2rem;">→</span>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function setupSidebarFilters() {
+            const container = document.getElementById('sidebar-filters');
+            container.innerHTML = `<a href="#" class="filter-item ${currentCategory === 'all' ? 'active' : ''}" onclick="showCategory('all'); return false;" data-filter="all">All Items</a>`;
+
+            Object.keys(categoryData).forEach(key => {
+                container.innerHTML += `
+                    <a href="#" class="filter-item" onclick="showCategory('${key}'); return false;" data-filter="${key}">
+                        ${categoryData[key].name}
+                    </a>
+                `;
+            });
+        }
+
+        function renderCategoryGallery(filter) {
+            const gallery = document.getElementById('gallery');
+            gallery.innerHTML = '';
+
+            const filteredData = filter === 'all'
+                ? designsData
+                : designsData.filter(d => d.category === filter);
+
+            if (filteredData.length === 0) {
+                gallery.innerHTML = `
+                    <div style="grid-column: 1/-1; text-align: center; color: var(--color-slate); padding: 4rem;">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">📭</div>
+                        <h3>No items yet</h3>
+                        <p>This category is waiting for awesome designs.</p>
+                    </div>`;
+                return;
+            }
+
+            filteredData.forEach(design => {
+                const item = document.createElement('div');
+                item.className = 'gallery-item';
+
+                // Render Tags
+                const tagsHtml = design.tags ? design.tags.map(t => `<span class="tag">${t}</span>`).join('') : '';
+
+                item.innerHTML = `
+                    <div class="item-image" onclick="viewCode('${design.id}')">
+                        <iframe src="designs/${design.fileName}" style="width: 100%; height: 100%; border: none; pointer-events: none;"></iframe>
+                    </div>
+                    <div class="item-content">
+                        <div class="item-header">
+                            <span class="item-category">${categoryData[design.category]?.name || design.category}</span>
+                            <div class="item-tags">${tagsHtml}</div>
+                        </div>
+                        <h3 class="item-title">${design.title}</h3>
+                        <p class="item-description">${design.description}</p>
+                        <div class="item-actions">
+                            <button class="view-preview-btn" onclick="viewPreview('${design.id}')">Preview</button>
+                            <button class="view-code-btn" onclick="viewCode('${design.id}')">View Code</button>
+                        </div>
+                    </div>
+                `;
+                gallery.appendChild(item);
+            });
+        }
+
+        // View Code & Modal Logic (Same as before)
+        function viewCode(designId) {
+            const design = designsData.find(d => d.id === designId);
+            if (!design) return;
+
+            currentDesignCode = design.code || '';
+            currentDesignFileName = design.fileName;
+
+            document.getElementById('codeModalTitle').textContent = design.title;
+            document.getElementById('previewFrame').src = `designs/${design.fileName}`;
+            document.getElementById('codeDisplay').textContent = currentDesignCode;
+
+            if (window.hljs) {
+                hljs.highlightElement(document.getElementById('codeDisplay'));
+            }
+
+            document.getElementById('codeModal').classList.add('active');
+        }
+
+        function viewPreview(designId) {
+            const design = designsData.find(d => d.id === designId);
+            if (!design) return;
+            window.open(`designs/${design.fileName}`, '_blank');
+        }
+
+        function copyCode() {
+            navigator.clipboard.writeText(currentDesignCode).then(() => {
+                const btn = document.querySelector('.copy-btn');
+                const originalText = btn.textContent;
+                btn.textContent = '✓ Copied!';
+                setTimeout(() => { btn.textContent = originalText; }, 2000);
+            });
+        }
+
+        function downloadFile() {
+            const blob = new Blob([currentDesignCode], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = currentDesignFileName;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // Modal Toggles
+        function openUploadModal() { document.getElementById('uploadModal').classList.add('active'); }
+        function closeUploadModal() { document.getElementById('uploadModal').classList.remove('active'); document.getElementById('uploadForm').reset(); }
+        function closeCodeModal() { document.getElementById('codeModal').classList.remove('active'); }
+
+        document.getElementById('uploadModal').addEventListener('click', function (e) { if (e.target === this) closeUploadModal(); });
+        document.getElementById('codeModal').addEventListener('click', function (e) { if (e.target === this) closeCodeModal(); });
+
+        // Submit Logic
+        document.getElementById('uploadForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            // ... (Handle form data, map to new schema) ...
+            // For brevity, using simplified logic for now
+            alert("Upload functionality will be updated to support new categories soon.");
+            closeUploadModal();
+        });
+    </script>
+</body>
+
+</html>
